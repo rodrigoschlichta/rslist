@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.camfel.rslist.dto.GameDTO;
 import com.camfel.rslist.dto.GameMinDTO;
 import com.camfel.rslist.entities.Game;
+import com.camfel.rslist.projections.GameMinProjection;
 import com.camfel.rslist.repositories.GameRepository;
 
 
@@ -29,6 +30,13 @@ public class GameService {
 	@Transactional(readOnly = true)
 	public List<GameMinDTO> findAll(){
 		List<Game> result = gameRepository.findAll();
+		List<GameMinDTO> dto = result.stream().map(x -> new GameMinDTO(x)).toList();
+		return dto; 
+}
+	
+	@Transactional(readOnly = true)
+	public List<GameMinDTO> findByList(Long listId){
+		List<GameMinProjection> result = gameRepository.searchByList(listId);
 		List<GameMinDTO> dto = result.stream().map(x -> new GameMinDTO(x)).toList();
 		return dto; 
 }
